@@ -47,7 +47,7 @@ gulp.task('serve', ['es6', 'sass'], () => {
     reloadDelay: 500
   });
 
-  return nodemon({ script: 'server.js'})
+  return nodemon({ script: 'index.js'})
     .on('start', () => browserSync.reload());
 });
 
