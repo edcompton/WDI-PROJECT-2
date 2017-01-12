@@ -3,17 +3,15 @@ const google = google;
 
 googleMap.addInfoWindowForVenue = function(venue, marker) {
   google.maps.event.addListener(marker, 'click', () => {
+    var contentString = '';
+    contentString += `<h3>${venue.name}</h3>`;
     $.get(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&venueId=${ venue.ticketmasterId }&size=20&classificationName=Music`).done((data) => {
       $(data._embedded.events).each((index, gig) => {
-        // console.log(gig.name);
-        var contentstring = `<h3>${gig.name}</h3>`;
-        // var gigImage = $('<img src="">').attr('src').html(gig.images[0].url);
-        // var contentstring = $(`<h1>${ venue.name }</h1>`).html();
-        // $(contentstring).append(gigName);
-        // console.log(gigName);
+        console.log(gig);
+        contentString += `<h5>${gig.name}</h5><p>${gig.dates.start.localDate}</p>`;
         if (typeof this.infoWindow !== 'undefined') this.infoWindow.close();
         this.infoWindow = new google.maps.InfoWindow({
-          content: contentstring
+          content: contentString
         });
         this.infoWindow.open(this.map, marker);
         this.map.setCenter(marker.getPosition());
