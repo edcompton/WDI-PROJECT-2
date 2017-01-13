@@ -44,10 +44,6 @@ function saveVenues(obj) {
   var venue = obj.events;
   var count = 0;
   venue.forEach(function(venue, index, venues) {
-    // Gig.find({ venuename: venue._embedded.venues[0].name }, (err, data) =>
-    // console.log(data.forEach(function (value, index) {
-    //   console.log(value);
-    // })));
     if (venue._embedded.venues[0].location) {
       Venue.create({
         name: venue._embedded.venues[0].name,
@@ -75,7 +71,6 @@ function saveVenues(obj) {
       });
     }
   });
-
 }
 
 function getVenues() {
