@@ -14,7 +14,7 @@ googleMap.gigInfoWindow = function() {
   let relatedArtists = '';
   $(googleMap.relatedArtists).each((index, artist) => {
     if (index < 20) {
-      relatedArtists += `<a href="${googleMap.relatedArtistsUrl[index]}">${artist}</a>, `;
+      relatedArtists += `<a href="${googleMap.relatedArtistsUrl[index]}">${artist}</a>,  `;
       // console.log(artist);
       console.log(relatedArtists);
     }
@@ -98,11 +98,11 @@ googleMap.createMarkerForNewVenues = function(venue) {
       // console.log(data);
       if (data._embedded !== undefined) {
         var pinIcon = new google.maps.MarkerImage(
-          'http://www.freeiconspng.com/uploads/black-music-note-icon-5.png',
+          'http://icons.iconarchive.com/icons/martz90/circle/512/mic-icon.png',
           null,
           null,
           null,
-          new google.maps.Size(22, 28)
+          new google.maps.Size(25, 25)
         );
         const latlng = new google.maps.LatLng(venue.lat, venue.lng);
         const marker = new google.maps.Marker({
@@ -124,7 +124,7 @@ googleMap.addInfoWindowForNewVenue = function(venue, marker) {
     var contentString = '';
     // console.log(venue);
     var genre = $('.genres').val();
-    contentString += `<h4>${venue.name}</h4>`;
+    contentString += `<h3>${venue.name}</h3>`;
     $.get(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&venueId=${ venue.ticketmasterId }&size=20&classificationName=${genre}`).done((data) => {
       $(data._embedded.events).each((index, gig) => {
         var gigName = gig.name;
@@ -144,7 +144,7 @@ googleMap.addInfoWindowForNewVenue = function(venue, marker) {
           gigName.split('presents');
           gigName = gigName.substring(0, gigName.indexOf('presents'));
         }
-        contentString += `<div><a class="modalWindow" ><h6 id=${gig.url}>${gigName}</h6></a><p>${gig.dates.start.localDate}</p></div>`;
+        contentString += `<div><a class="modalWindow" ><h5 class="infoWindowContent" id=${gig.url}>${gigName}</h5></a><strong><p>${gig.dates.start.localDate}</p></strong></div>`;
         if (typeof this.infoWindow !== 'undefined') this.infoWindow.close();
         this.infoWindow = new google.maps.InfoWindow({
           content: contentString
@@ -225,7 +225,7 @@ googleMap.closeNav = function() {
 googleMap.addInfoWindowForVenue = function(venue, marker) {
   google.maps.event.addListener(marker, 'click', () => {
     var contentString = '';
-    contentString += `<div><h4>${venue.name}</h4>`;
+    contentString += `<div><h3>${venue.name}</h3>`;
     $.get(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&venueId=${ venue.ticketmasterId }&size=20&classificationName=Music`).done((data) => {
       $(data._embedded.events).each((index, gig) => {
         // console.log(gig);
@@ -247,7 +247,7 @@ googleMap.addInfoWindowForVenue = function(venue, marker) {
           gigName = gigName.substring(0, gigName.indexOf('presents'));
         }
         // console.log(gigName);
-        contentString += `<div class="infoWindowContent"><a class="infoWindowContent"><h6 class="infoWindowContent" id=${gig.url}>${gigName}</h6></a><p class="infoWindowContent">${gig.dates.start.localDate}</p></div></div>`;
+        contentString += `<a class="modalWindow"><h5 class="infoWindowContent" id=${gig.url}>${gigName}</h5></a><strong><p >${gig.dates.start.localDate}</p></strong></div>`;
         if (typeof this.infoWindow !== 'undefined') this.infoWindow.close();
         this.infoWindow = new google.maps.InfoWindow({
           content: contentString,
@@ -294,9 +294,6 @@ googleMap.populateVenues = function(data) {
   });
 };
 
-// The below function is where the selection for the area and genre is passed into the get request to populate the map! Could actually start with london leaving the below as it is, and when the criteria is changed then the map is updated.
-// So - next steps are - when the map has been created and populated, write a new function to make a new request on submit of the two fields, changing the arguments for location(market) and genre. Then repopulate the map with that data, using existing functions to do so.
-// Ensure that the data passed into those functions is the same as the data passed into the existing functions (level of delving into the returned object)
 googleMap.getVenues = function() {
   $.get('http://localhost:3000/venues').done(this.populateVenues);
 };
@@ -314,6 +311,7 @@ googleMap.mapSetup = function() {
   $('body').on('click', '.gigInfo', googleMap.gigInfoWindow);
   $('body').on('click', '.close', googleMap.clearArtistArray);
   $('.gigSubmission').on('click', googleMap.searchArea);
+  $('.searchSubmission').on('click', googleMap.searchArtistGigs);
   this.getVenues();
 };
 

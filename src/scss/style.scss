@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  font-family: 'Muli', sans-serif !important;
 }
 
 #map-canvas {
@@ -85,12 +86,15 @@ nav.navbar.navbar-default {
 
 .modalWindow {
   max-height: 200px !important;
+  width: 200px;
+  height: 200px;
 }
 
 .btn-primary {
     color: #fff !important;
     background-color: #818181 !important;
     border-color: #818181 !important;
+    font-family: 'Arimo', sans-serif;
 }
 //
 // .navbar-inverse {
@@ -103,5 +107,5 @@ nav.navbar.navbar-default {
 }
 
 .infoWindowContent {
-  display: inline-block;
+  font-size: 14px;
 }
