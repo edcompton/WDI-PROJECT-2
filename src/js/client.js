@@ -98,11 +98,11 @@ googleMap.createMarkerForNewVenues = function(venue) {
       // console.log(data);
       if (data._embedded !== undefined) {
         var pinIcon = new google.maps.MarkerImage(
-          'http://www.freeiconspng.com/uploads/microfono-microphone-icon-coloring-book-colouring-xanthochroi---2.png',
+          'http://www.freeiconspng.com/uploads/black-music-note-icon-5.png',
           null,
           null,
           null,
-          new google.maps.Size(18, 28)
+          new google.maps.Size(22, 28)
         );
         const latlng = new google.maps.LatLng(venue.lat, venue.lng);
         const marker = new google.maps.Marker({
@@ -127,8 +127,24 @@ googleMap.addInfoWindowForNewVenue = function(venue, marker) {
     contentString += `<h4>${venue.name}</h4>`;
     $.get(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&venueId=${ venue.ticketmasterId }&size=20&classificationName=${genre}`).done((data) => {
       $(data._embedded.events).each((index, gig) => {
-        // console.log(gig);
-        contentString += `<div><a class="modalWindow" ><h6 id=${gig.url}>${gig.name}</h6></a><p>${gig.dates.start.localDate}</p></div>`;
+        var gigName = gig.name;
+        if (gigName.indexOf('-') > -1) {
+          gigName.split('-');
+          gigName = gigName.substring(0, gigName.indexOf('-'));
+        }
+        if (gigName.indexOf(':') > -1) {
+          gigName.split(':');
+          gigName = gigName.substring(0, gigName.indexOf(':'));
+        }
+        if (gigName.indexOf(',') > -1) {
+          gigName.split(',');
+          gigName = gigName.substring(0, gigName.indexOf(','));
+        }
+        if (gigName.indexOf('presents') > -1) {
+          gigName.split('presents');
+          gigName = gigName.substring(0, gigName.indexOf('presents'));
+        }
+        contentString += `<div><a class="modalWindow" ><h6 id=${gig.url}>${gigName}</h6></a><p>${gig.dates.start.localDate}</p></div>`;
         if (typeof this.infoWindow !== 'undefined') this.infoWindow.close();
         this.infoWindow = new google.maps.InfoWindow({
           content: contentString
@@ -209,14 +225,33 @@ googleMap.closeNav = function() {
 googleMap.addInfoWindowForVenue = function(venue, marker) {
   google.maps.event.addListener(marker, 'click', () => {
     var contentString = '';
-    contentString += `<h4>${venue.name}</h4>`;
+    contentString += `<div class="modalWindow"><h4>${venue.name}</h4>`;
     $.get(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&venueId=${ venue.ticketmasterId }&size=20&classificationName=Music`).done((data) => {
       $(data._embedded.events).each((index, gig) => {
-        console.log(gig);
-        contentString += `<div><a class="modalWindow" ><h6 id=${gig.url}>${gig.name}</h6></a><p>${gig.dates.start.localDate}</p></div>`;
+        // console.log(gig);
+        var gigName = gig.name;
+        if (gigName.indexOf('-') > -1) {
+          gigName.split('-');
+          gigName = gigName.substring(0, gigName.indexOf('-'));
+        }
+        if (gigName.indexOf(':') > -1) {
+          gigName.split(':');
+          gigName = gigName.substring(0, gigName.indexOf(':'));
+        }
+        if (gigName.indexOf(',') > -1) {
+          gigName.split(',');
+          gigName = gigName.substring(0, gigName.indexOf(','));
+        }
+        if (gigName.indexOf('presents') > -1) {
+          gigName.split('presents');
+          gigName = gigName.substring(0, gigName.indexOf('presents'));
+        }
+        // console.log(gigName);
+        contentString += `<div><a class="modalWindow" ><h6 id=${gig.url}>${gigName}</h6></a><p>${gig.dates.start.localDate}</p></div></div>`;
         if (typeof this.infoWindow !== 'undefined') this.infoWindow.close();
         this.infoWindow = new google.maps.InfoWindow({
-          content: contentString
+          content: contentString,
+          pixelOffset: new google.maps.Size(0, 20)
         });
         this.infoWindow.open(this.map, marker);
         this.map.setCenter(marker.getPosition());
@@ -232,11 +267,11 @@ googleMap.addInfoWindowForVenue = function(venue, marker) {
 googleMap.createMarkerForVenue = function(venue) {
   if (venue.marketId === '202') {
     var pinIcon = new google.maps.MarkerImage(
-      'http://www.freeiconspng.com/uploads/microfono-microphone-icon-coloring-book-colouring-xanthochroi---2.png',
+      'http://www.freeiconspng.com/uploads/black-music-note-icon-5.png',
       null,
       null,
       null,
-      new google.maps.Size(18, 28)
+      new google.maps.Size(22, 28)
     );
     const latlng = new google.maps.LatLng(venue.lat, venue.lng);
     const marker = new google.maps.Marker({
