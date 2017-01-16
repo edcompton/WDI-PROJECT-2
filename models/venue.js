@@ -6,7 +6,8 @@ const venueSchema = new mongoose.Schema({
   postcode: {type: String },
   lat: {type: String },
   lng: {type: String },
-  ticketmasterId: { type: String }
+  ticketmasterId: { type: String },
+  marketId: {type: String}
 });
 
 module.exports = mongoose.model('Venue', venueSchema);
