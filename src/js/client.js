@@ -39,19 +39,15 @@ googleMap.noArtistText = function() {
 };
 
 googleMap.newSearchMarkers = function(venue, gig) {
-  var pinIcon = new google.maps.MarkerImage(
-    'http://icons.iconarchive.com/icons/martz90/circle/512/mic-icon.png',
-    null,
-    null,
-    null,
-    new google.maps.Size(25, 25)
-  );
   const latlng = new google.maps.LatLng(venue.latitude, venue.longitude);
   const marker = new google.maps.Marker({
     position: latlng,
+    icon: {
+      url: '../Images/newMicrophone.png',
+      scaledSize: new google.maps.Size(30, 30)
+    },
     map: this.map,
-    animation: google.maps.Animation.DROP,
-    icon: pinIcon
+    animation: google.maps.Animation.DROP
   });
   googleMap.latlngArray.push(latlng);
   googleMap.markersArray.push(marker);
@@ -197,19 +193,15 @@ googleMap.createMarkerForNewVenues = function(venue) {
 
     $.get(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&venueId=${ venue.ticketmasterId }&size=20&classificationName=${ genre}`).done((data) => {
       if (data._embedded !== undefined) {
-        var pinIcon = new google.maps.MarkerImage(
-          'http://icons.iconarchive.com/icons/martz90/circle/512/mic-icon.png',
-          null,
-          null,
-          null,
-          new google.maps.Size(25, 25)
-        );
         const latlng = new google.maps.LatLng(venue.lat, venue.lng);
         const marker = new google.maps.Marker({
           position: latlng,
+          icon: {
+            url: '../Images/newMicrophone.png',
+            scaledSize: new google.maps.Size(30, 30)
+          },
           map: this.map,
-          animation: google.maps.Animation.DROP,
-          icon: pinIcon
+          animation: google.maps.Animation.DROP
         });
         googleMap.markersArray.push(marker);
         googleMap.addInfoWindowForNewVenue(venue, marker);
@@ -350,19 +342,15 @@ googleMap.addInfoWindowForVenue = function(venue, marker) {
 
 googleMap.createMarkerForVenue = function(venue) {
   if (venue.marketId === '202') {
-    var pinIcon = new google.maps.MarkerImage(
-      'http://icons.iconarchive.com/icons/martz90/circle/512/mic-icon.png',
-      null,
-      null,
-      null,
-      new google.maps.Size(25, 25)
-    );
     const latlng = new google.maps.LatLng(venue.lat, venue.lng);
     const marker = new google.maps.Marker({
       position: latlng,
+      icon: {
+        url: '../Images/newMicrophone.png',
+        scaledSize: new google.maps.Size(30, 30)
+      },
       map: this.map,
-      animation: google.maps.Animation.DROP,
-      icon: pinIcon
+      animation: google.maps.Animation.DROP
     });
     googleMap.markersArray.push(marker);
     google.maps.event.addListener(marker, 'click', function(){});
@@ -388,7 +376,7 @@ googleMap.mapSetup = function() {
     zoom: 12,
     center: new google.maps.LatLng(51.506178,-0.088369),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
-    styles: [{'featureType': 'landscape.natural','elementType': 'geometry.fill','stylers': [{'visibility': 'on'},{'color': '#e0efef'}]},{'featureType': 'poi','elementType': 'geometry.fill','stylers': [{'visibility': 'on'},{'hue': '#1900ff'},{'color': '#c0e8e8'}]},{'featureType': 'road','elementType': 'geometry','stylers': [{'lightness': 100},{'visibility': 'simplified'}]},{'featureType': 'road','elementType': 'labels','stylers': [{'visibility': 'off'}]},{'featureType': 'transit.line','elementType': 'geometry','stylers': [{'visibility': 'on'},{'lightness': 700}]},{'featureType': 'water','elementType': 'all','stylers': [{'color': '#7dcdcd'}]}]
+    styles: [{"featureType":"all","elementType":"all","stylers":[{"hue":"#ff0000"},{"saturation":-100},{"lightness":-30}]},{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#353535"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#656565"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"color":"#505050"}]},{"featureType":"poi","elementType":"geometry.stroke","stylers":[{"color":"#808080"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#454545"}]}]
   };
   this.map = new google.maps.Map(canvas, mapOptions);
   $('body').on('click', '.modalWindow', googleMap.openNav);

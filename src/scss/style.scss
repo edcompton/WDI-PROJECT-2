@@ -92,7 +92,7 @@ nav.navbar.navbar-default {
 }
 
 .btn-primary {
-    color: #fff !important;
+    color: #181818 !important;
     background-color: #1ed760 !important;
     border-color: #1ed760 !important;
     font-family: 'Montserrat', sans-serif !important;
@@ -122,7 +122,7 @@ nav.navbar.navbar-default {
 {
     /* we have to use !important because we are overwritng inline styles */
     background-color: #181818 !important;
-    // box-shadow: none !important;
+    box-shadow: none !important;
     // width: auto !important;
     // height: auto; !important;
 }
