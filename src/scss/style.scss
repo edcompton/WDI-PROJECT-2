@@ -1,6 +1,7 @@
 body {
   margin: 0;
-  font-family: 'Muli', sans-serif !important;
+  font-family: 'Montserrat', sans-serif !important;
+  color: #1ed760;
 }
 
 #map-canvas {
@@ -18,7 +19,7 @@ body {
     z-index: 1; /* Stay on top */
     top: 50px;
     left: 0;
-    background-color: #111; /* Black*/
+    background-color: #181818; /* Black*/
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
@@ -92,18 +93,13 @@ nav.navbar.navbar-default {
 
 .btn-primary {
     color: #fff !important;
-    background-color: #818181 !important;
-    border-color: #818181 !important;
-    font-family: 'Arimo', sans-serif;
+    background-color: #1ed760 !important;
+    border-color: #1ed760 !important;
+    font-family: 'Montserrat', sans-serif !important;
 }
-//
-// .navbar-inverse {
-//     background-color: rgb(222, 221, 221) !important;
-//     border-color: #b5aeae !important;
-// }
 
 .modal-content {
-  background-color: #E6E6E9 !important;
+  background-color: #181818 !important;
 }
 
 .infoWindowContent {
@@ -112,4 +108,37 @@ nav.navbar.navbar-default {
 
 .missingArtist {
   display: none;
+}
+
+.navbar-inverse .navbar-brand {
+  color: #1ed760 !important;
+}
+
+.navbar-inverse {
+  background-color: #181818 !important;
+}
+
+.gm-style > div:first-child > div + div > div:last-child > div > div:first-child > div
+{
+    /* we have to use !important because we are overwritng inline styles */
+    background-color: #181818 !important;
+    // box-shadow: none !important;
+    // width: auto !important;
+    // height: auto; !important;
+}
+
+h5 {
+  color: #a0a0a0 !important;
+}
+
+h3 {
+  color: #fff !important;
+}
+
+h6 {
+  color: #a0a0a0 !important;
+}
+
+h3 {
+  color: #1ed760
 }

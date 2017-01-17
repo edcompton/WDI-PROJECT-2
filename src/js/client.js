@@ -18,8 +18,6 @@ googleMap.refocusMap = function() {
 googleMap.searchArtistGigs = function(e) {
   e.preventDefault();
   var search = ($('.searchInput').val());
-  // console.log(search);
-
   $.get(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&keyword=${search}`).done((data) => {
     if (data._embedded === undefined) {
       googleMap.noArtistText();
@@ -27,7 +25,6 @@ googleMap.searchArtistGigs = function(e) {
       googleMap.clearOverlays();
       $(data._embedded.events).each((index, gig) => {
         const venues = (gig._embedded.venues[0].location);
-        // console.log((gig._embedded.venues[0].location));
         googleMap.newSearchMarkers(venues, gig);
         setTimeout(() => {
           googleMap.refocusMap();
@@ -57,9 +54,7 @@ googleMap.newSearchMarkers = function(venue, gig) {
     icon: pinIcon
   });
   googleMap.latlngArray.push(latlng);
-  console.log(googleMap.latlngArray);
   googleMap.markersArray.push(marker);
-  // console.log(gig);
   googleMap.addInfoWindowForSearchMarkers(gig, marker);
 };
 
@@ -84,7 +79,7 @@ googleMap.addInfoWindowForSearchMarkers = function(gig, marker) {
       gigName.split('presents');
       gigName = gigName.substring(0, gigName.indexOf('presents'));
     }
-    contentString += `<a class="modalWindow"><h5 class="infoWindowContent" id=${gig.url}>${gigName}</h5></a><strong><p >${gig.dates.start.localDate}</p></strong></div>`;
+    contentString += `<a class="modalWindow"><h5 class="infoWindowContent" id=${gig.url}>${gigName}</h5></a><p style="color: #fff;" >${gig.dates.start.localDate}</p></div>`;
     if (typeof this.infoWindow !== 'undefined') this.infoWindow.close();
     this.infoWindow = new google.maps.InfoWindow({
       content: contentString,
@@ -94,7 +89,6 @@ googleMap.addInfoWindowForSearchMarkers = function(gig, marker) {
     this.map.setCenter(marker.getPosition());
     return gig.name;
   });
-  // this.map.setZoom(15);
 };
 
 googleMap.clearArtistArray = function() {
@@ -102,13 +96,30 @@ googleMap.clearArtistArray = function() {
   googleMap.relatedArtistsUrl = [];
 };
 
+googleMap.noSpotifyInfoWindow = function() {
+  $('.modal-content').html(`
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h3 class="modal-title">${googleMap.artist}</h3>
+    </div>
+    <div class="modal-body">
+
+    <h5>Ticketmaster Event Page</h5>
+    <a href=${googleMap.ticketmasterUrl} target="_blank" style="color: #fff;">${googleMap.ticketmasterUrl}</a>
+    </div>
+    <div class="modal-footer">
+
+    </div>
+    </form>`
+  );
+  $('.modal').modal('show');
+};
+
 googleMap.gigInfoWindow = function() {
   let relatedArtists = '';
   $(googleMap.relatedArtists).each((index, artist) => {
     if (index < 20) {
-      relatedArtists += `<a href="${googleMap.relatedArtistsUrl[index]}">${artist}</a>,  `;
-      // console.log(artist);
-      // console.log(relatedArtists);
+      relatedArtists += `<a href="${googleMap.relatedArtistsUrl[index]}" style="color: #fff;" target="_blank">${artist}</a>,  `;
     }
   });
   $('.modal-content').html(`
@@ -123,15 +134,15 @@ googleMap.gigInfoWindow = function() {
     </div>
 
     <div class="form-group">
-    <label for="user_name">Related Artists</label>
-    <p>${relatedArtists}</p>
+    <h5>Related Artists</h5>
+    <p style="color: #fff;">${relatedArtists}</p>
     </div>
 
-    <h6>Artist Spotify Page</h6>
-    <a href=${googleMap.artistUrl}>${googleMap.artistUrl}</a>
+    <h5>Artist Spotify Page</h5>
+    <a href=${googleMap.artistUrl} style="color: #fff;" target="_blank">${googleMap.artistUrl}</a>
 
-    <h6>Ticketmaster Event Page</h6>
-    <a href=${googleMap.ticketmasterUrl}>${googleMap.ticketmasterUrl}</a>
+    <h5>Ticketmaster Event Page</h5>
+    <a href=${googleMap.ticketmasterUrl} style="color: #fff;" target="_blank">${googleMap.ticketmasterUrl}</a>
     </div>
     <div class="modal-footer">
 
@@ -139,7 +150,6 @@ googleMap.gigInfoWindow = function() {
     </form>`
   );
   $('.modal').modal('show');
-  // console.log('clicked');
 };
 
 googleMap.clearOverlays = function() {
@@ -154,6 +164,7 @@ googleMap.clearOverlays = function() {
 googleMap.searchArea = function(e) {
   e.preventDefault();
   googleMap.clearOverlays();
+  googleMap.closeNav();
   $.get('http://localhost:3000/venues').done((data) => {
     $(data.venues).each((index, gig) => {
       setTimeout(() => {
@@ -162,7 +173,6 @@ googleMap.searchArea = function(e) {
     });
   });
 };
-
 
 googleMap.createMarkerForNewVenues = function(venue) {
   var city = $('.cities').val();
@@ -179,17 +189,13 @@ googleMap.createMarkerForNewVenues = function(venue) {
     this.map.setCenter(new google.maps.LatLng(40.729074, -73.983468));
     this.map.setZoom(13);
   }
-
-  // console.log(venue);
   if (venue.marketId === city) {
-    // console.log(city);
     var genre = $('.genres').val();
     if (genre === 'Genre') {
       genre = 'Music';
     }
-    // Can I use this get request to specify if there is an event at the venue for that genre, and therefore not show the icon?
+
     $.get(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&venueId=${ venue.ticketmasterId }&size=20&classificationName=${ genre}`).done((data) => {
-      // console.log(data);
       if (data._embedded !== undefined) {
         var pinIcon = new google.maps.MarkerImage(
           'http://icons.iconarchive.com/icons/martz90/circle/512/mic-icon.png',
@@ -206,7 +212,6 @@ googleMap.createMarkerForNewVenues = function(venue) {
           icon: pinIcon
         });
         googleMap.markersArray.push(marker);
-        // google.maps.event.addListener(marker, 'click', function(){});
         googleMap.addInfoWindowForNewVenue(venue, marker);
       }
     });
@@ -216,7 +221,6 @@ googleMap.createMarkerForNewVenues = function(venue) {
 googleMap.addInfoWindowForNewVenue = function(venue, marker) {
   google.maps.event.addListener(marker, 'click', () => {
     var contentString = '';
-    // console.log(venue);
     var genre = $('.genres').val();
     if (genre === 'Genre') {
       genre = 'Music';
@@ -241,7 +245,7 @@ googleMap.addInfoWindowForNewVenue = function(venue, marker) {
           gigName.split('presents');
           gigName = gigName.substring(0, gigName.indexOf('presents'));
         }
-        contentString += `<div><a class="modalWindow" ><h5 class="infoWindowContent" id=${gig.url}>${gigName}</h5></a><strong><p>${gig.dates.start.localDate}</p></strong></div>`;
+        contentString += `<div><a class="modalWindow" ><h5 class="infoWindowContent" id=${gig.url}>${gigName}</h5></a><p style="color: #fff;">${gig.dates.start.localDate}</p></div>`;
         if (typeof this.infoWindow !== 'undefined') this.infoWindow.close();
         this.infoWindow = new google.maps.InfoWindow({
           content: contentString
@@ -250,9 +254,7 @@ googleMap.addInfoWindowForNewVenue = function(venue, marker) {
         this.map.setCenter(marker.getPosition());
         return gig.name;
       });
-
     });
-    // this.map.setZoom(15);
   });
 };
 
@@ -263,49 +265,39 @@ googleMap.addInfoWindowForNewVenue = function(venue, marker) {
 // ---------------------------------------------------------------------------
 
 googleMap.openNav = function(e) {
-  console.log(document.getElementById('mySidenav'));
   if (document.getElementById('mySidenav') !== null) {
     $('#sideNavAll').remove();
   }
   var artist = ($(e.target).text());
   googleMap.ticketmasterUrl = ($(e.target).attr('id'));
   googleMap.artist = artist;
-  // console.log(artist);
   $.get(`https://api.spotify.com/v1/search?q=${artist}&type=artist`).done((data) => {
+    if (data.artists.items[0] === undefined) {
+      googleMap.noArtistText();
+      googleMap.noSpotifyInfoWindow();
+    }
     var artistId = data.artists.items[0].id;
-    // console.log(data);
     googleMap.artistPicture1 = data.artists.items[0].images[0].url;
     googleMap.artistUrl = data.artists.items[0].external_urls.spotify;
-    // console.log(artistId);
     $.get(`https://api.spotify.com/v1/artists/${artistId}/albums?country=GB`).done((data) => {
-      // console.log(data);
-      // console.log(data.items[0].uri);
       var albumUri = data.items[0].uri;
-      // console.log(albumUri);
       var contentString = `<div id="sideNavAll"> <div id="mySidenav" class="sidenav">
       <a href="javascript:void(0)" class="closebtn" onclick="googleMap.closeNav()">&times;</a>
-      <a href="#" class="gigInfo">Gig Information</a>
+      <a href="#" class="gigInfo" >Gig Information</a>
       <p>Spotify Tracks</p>
       <iframe src="https://embed.spotify.com/?uri=${albumUri}" width="300" height="630" frameborder="0" allowtransparency="true"></iframe>
       </div>
       <span onclick="openNav()"></span>
       </div>`;
       $('body').append(contentString);
-      console.log(contentString);
       setTimeout(function(){
         document.getElementById('mySidenav').style.width = '300px';
       }, 100);
-      console.log('clicked');
       $('.gigInfo').on('click', googleMap.gigInfoWindow);
       $.get(`https://api.spotify.com/v1/artists/${data.items[0].artists[0].id}/related-artists`).done((data) => {
-        // console.log(data);
         $(data.artists).each((index, gig) => {
-          // console.log(gig);
           googleMap.relatedArtists.push(gig.name);
           googleMap.relatedArtistsUrl.push(gig.external_urls.spotify);
-          console.log(googleMap.relatedArtists);
-          console.log(googleMap.relatedArtistsUrl);
-
         });
       });
     });
@@ -313,7 +305,7 @@ googleMap.openNav = function(e) {
 };
 
 googleMap.closeNav = function() {
-  $('#sideNavAll').empty();
+  $('#sideNavAll').remove();
   setTimeout(function() {
     document.getElementById('mySidenav').style.width = '0';
   });
@@ -325,7 +317,6 @@ googleMap.addInfoWindowForVenue = function(venue, marker) {
     contentString += `<div><h3>${venue.name}</h3>`;
     $.get(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&venueId=${ venue.ticketmasterId }&size=20&classificationName=Music`).done((data) => {
       $(data._embedded.events).each((index, gig) => {
-        // console.log(gig);
         var gigName = gig.name;
         if (gigName.indexOf('-') > -1) {
           gigName.split('-');
@@ -343,8 +334,7 @@ googleMap.addInfoWindowForVenue = function(venue, marker) {
           gigName.split('presents');
           gigName = gigName.substring(0, gigName.indexOf('presents'));
         }
-        // console.log(gigName);
-        contentString += `<a class="modalWindow"><h5 class="infoWindowContent" id=${gig.url}>${gigName}</h5></a><strong><p >${gig.dates.start.localDate}</p></strong></div>`;
+        contentString += `<a class="modalWindow"><h5 class="infoWindowContent" id=${gig.url}>${gigName}</h5></a><p style="color: #fff;" >${gig.dates.start.localDate}</p></div>`;
         if (typeof this.infoWindow !== 'undefined') this.infoWindow.close();
         this.infoWindow = new google.maps.InfoWindow({
           content: contentString,
@@ -354,12 +344,9 @@ googleMap.addInfoWindowForVenue = function(venue, marker) {
         this.map.setCenter(marker.getPosition());
         return gig.name;
       });
-
     });
-    // this.map.setZoom(15);
   });
 };
-
 
 googleMap.createMarkerForVenue = function(venue) {
   if (venue.marketId === '202') {
