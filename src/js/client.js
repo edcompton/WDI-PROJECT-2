@@ -5,6 +5,98 @@ googleMap.latlngArray  = [];
 googleMap.relatedArtists = [];
 googleMap.relatedArtistsUrl = [];
 
+googleMap.refocusMap = function() {
+  var latlngbounds = new google.maps.LatLngBounds();
+  console.log(googleMap.latlngArray);
+  googleMap.latlngArray.forEach(function(latlng){
+    latlngbounds.extend(latlng);
+  });
+  this.map.setCenter(latlngbounds.getCenter());
+  this.map.fitBounds(latlngbounds);
+};
+
+googleMap.searchArtistGigs = function(e) {
+  e.preventDefault();
+  var search = ($('.searchInput').val());
+  // console.log(search);
+
+  $.get(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&keyword=${search}`).done((data) => {
+    if (data._embedded === undefined) {
+      googleMap.noArtistText();
+    } else {
+      googleMap.clearOverlays();
+      $(data._embedded.events).each((index, gig) => {
+        const venues = (gig._embedded.venues[0].location);
+        // console.log((gig._embedded.venues[0].location));
+        googleMap.newSearchMarkers(venues, gig);
+        setTimeout(() => {
+          googleMap.refocusMap();
+        }, 1000);
+      });
+    }
+  });
+};
+
+googleMap.noArtistText = function() {
+  $('.missingArtist').show().fadeOut(1000);
+};
+
+googleMap.newSearchMarkers = function(venue, gig) {
+  var pinIcon = new google.maps.MarkerImage(
+    'http://icons.iconarchive.com/icons/martz90/circle/512/mic-icon.png',
+    null,
+    null,
+    null,
+    new google.maps.Size(25, 25)
+  );
+  const latlng = new google.maps.LatLng(venue.latitude, venue.longitude);
+  const marker = new google.maps.Marker({
+    position: latlng,
+    map: this.map,
+    animation: google.maps.Animation.DROP,
+    icon: pinIcon
+  });
+  googleMap.latlngArray.push(latlng);
+  console.log(googleMap.latlngArray);
+  googleMap.markersArray.push(marker);
+  // console.log(gig);
+  googleMap.addInfoWindowForSearchMarkers(gig, marker);
+};
+
+googleMap.addInfoWindowForSearchMarkers = function(gig, marker) {
+  google.maps.event.addListener(marker, 'click', () => {
+    var contentString = '';
+    contentString += `<div><h3>${gig._embedded.venues[0].name}</h3>`;
+    var gigName = gig.name;
+    if (gigName.indexOf('-') > -1) {
+      gigName.split('-');
+      gigName = gigName.substring(0, gigName.indexOf('-'));
+    }
+    if (gigName.indexOf(':') > -1) {
+      gigName.split(':');
+      gigName = gigName.substring(0, gigName.indexOf(':'));
+    }
+    if (gigName.indexOf(',') > -1) {
+      gigName.split(',');
+      gigName = gigName.substring(0, gigName.indexOf(','));
+    }
+    if (gigName.indexOf('presents') > -1) {
+      gigName.split('presents');
+      gigName = gigName.substring(0, gigName.indexOf('presents'));
+    }
+    contentString += `<a class="modalWindow"><h5 class="infoWindowContent" id=${gig.url}>${gigName}</h5></a><strong><p >${gig.dates.start.localDate}</p></strong></div>`;
+    if (typeof this.infoWindow !== 'undefined') this.infoWindow.close();
+    this.infoWindow = new google.maps.InfoWindow({
+      content: contentString,
+      pixelOffset: new google.maps.Size(0, 20)
+    });
+    this.infoWindow.open(this.map, marker);
+    this.map.setCenter(marker.getPosition());
+    return gig.name;
+  });
+  // this.map.setZoom(15);
+};
+
 googleMap.clearArtistArray = function() {
   googleMap.relatedArtists = [];
   googleMap.relatedArtistsUrl = [];
@@ -16,7 +108,7 @@ googleMap.gigInfoWindow = function() {
     if (index < 20) {
       relatedArtists += `<a href="${googleMap.relatedArtistsUrl[index]}">${artist}</a>,  `;
       // console.log(artist);
-      console.log(relatedArtists);
+      // console.log(relatedArtists);
     }
   });
   $('.modal-content').html(`
@@ -47,7 +139,7 @@ googleMap.gigInfoWindow = function() {
     </form>`
   );
   $('.modal').modal('show');
-  console.log('clicked');
+  // console.log('clicked');
 };
 
 googleMap.clearOverlays = function() {
@@ -92,7 +184,9 @@ googleMap.createMarkerForNewVenues = function(venue) {
   if (venue.marketId === city) {
     // console.log(city);
     var genre = $('.genres').val();
-
+    if (genre === 'Genre') {
+      genre = 'Music';
+    }
     // Can I use this get request to specify if there is an event at the venue for that genre, and therefore not show the icon?
     $.get(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&venueId=${ venue.ticketmasterId }&size=20&classificationName=${ genre}`).done((data) => {
       // console.log(data);
@@ -124,6 +218,9 @@ googleMap.addInfoWindowForNewVenue = function(venue, marker) {
     var contentString = '';
     // console.log(venue);
     var genre = $('.genres').val();
+    if (genre === 'Genre') {
+      genre = 'Music';
+    }
     contentString += `<h3>${venue.name}</h3>`;
     $.get(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&venueId=${ venue.ticketmasterId }&size=20&classificationName=${genre}`).done((data) => {
       $(data._embedded.events).each((index, gig) => {
@@ -312,6 +409,7 @@ googleMap.mapSetup = function() {
   $('body').on('click', '.close', googleMap.clearArtistArray);
   $('.gigSubmission').on('click', googleMap.searchArea);
   $('.searchSubmission').on('click', googleMap.searchArtistGigs);
+  $('.missingArtist').hide();
   this.getVenues();
 };
 
