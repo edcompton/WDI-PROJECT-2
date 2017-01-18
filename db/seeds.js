@@ -11,7 +11,7 @@ mongoose.connect(config.db);
 //  NY marketId=35
 
 const options = {
-  uri: 'https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&radius=10000&marketId=35&size=500&classificationName=Music',
+  uri: 'https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&radius=10000&marketId=27&size=500&classificationName=Music',
   headers: {
     'User-Agent': 'Request-Promise'
   },
