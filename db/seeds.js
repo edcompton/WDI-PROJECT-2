@@ -11,12 +11,13 @@ mongoose.connect(config.db);
 //  NY marketId=35
 
 const options = {
-  uri: 'https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&radius=10000&marketId=27&size=500&classificationName=Music',
+  uri: 'https://app.ticketmaster.com/discovery/v2/events.json?apikey=S6Ne496thElaCfSl25nc9B3NkTEAk0o7&radius=10000&marketId=202&size=500&classificationName=Music',
   headers: {
     'User-Agent': 'Request-Promise'
   },
   json: true
 };
+
 
 // function saveGigs(obj) {
 //   var gig = obj;
@@ -44,76 +45,25 @@ const options = {
 //   });
 // }
 
-function saveVenues(obj) {
-  var venue = obj.events;
-  var count = 0;
-  venue.forEach(function(venue, index, venues) {
-    if (venue._embedded.venues[0].location) {
-      Venue.create({
-        name: venue._embedded.venues[0].name,
-        gigs: [],
-        postcode: venue._embedded.venues[0].postalCode,
-        lat: venue._embedded.venues[0].location.latitude,
-        lng: venue._embedded.venues[0].location.longitude,
-        ticketmasterId: venue._embedded.venues[0].id,
-        marketId: venue._embedded.venues[0].markets[0].id
-      }, function() {
-        count++;
-        console.log('Venue ' + count + ' was saved');
-        if (count === venues) return process.exit();
-      });
-    } else {
-      Venue.create({
-        name: venue._embedded.venues[0].name,
-        gigs: [],
-        postcode: venue._embedded.venues[0].postalCode,
-        ticketmasterId: venue._embedded.venues[0].id,
-        marketId: venue._embedded.venues[0].markets[0].id
-      }, function() {
-        console.log(venue._embedded.venues[0].name + ' is fucked');
-        count++;
-        console.log('Venue ' + count + ' was saved');
-        if (count === venues.length) return process.exit();
-      });
-    }
-  });
-}
-
-// LONDON VENUES DATABASE FUNCTION
+// LA and NY SEEDS FUNCTION
 // function saveVenues(obj) {
 //   var venue = obj.events;
 //   var count = 0;
 //   venue.forEach(function(venue, index, venues) {
 //     if (venue._embedded.venues[0].location) {
-//       if (venue._embedded.venues[0].markets[0].id === '202') {
-//         Venue.create({
-//           name: venue._embedded.venues[0].name,
-//           gigs: [],
-//           postcode: venue._embedded.venues[0].postalCode,
-//           lat: venue._embedded.venues[0].location.latitude,
-//           lng: venue._embedded.venues[0].location.longitude,
-//           ticketmasterId: venue._embedded.venues[0].id,
-//           marketId: venue._embedded.venues[0].markets[0].id
-//         }, function() {
-//           count++;
-//           console.log('Venue ' + count + ' was saved');
-//           if (count === venues) return process.exit();
-//         });
-//       } else {
-//         Venue.create({
-//           name: venue._embedded.venues[0].name,
-//           gigs: [],
-//           postcode: venue._embedded.venues[0].postalCode,
-//           lat: venue._embedded.venues[0].location.latitude,
-//           lng: venue._embedded.venues[0].location.longitude,
-//           ticketmasterId: venue._embedded.venues[0].id,
-//           marketId: venue._embedded.venues[0].markets[1].id
-//         }, function() {
-//           count++;
-//           console.log('Venue ' + count + ' was saved');
-//           if (count === venues) return process.exit();
-//         });
-//       }
+//       Venue.create({
+//         name: venue._embedded.venues[0].name,
+//         gigs: [],
+//         postcode: venue._embedded.venues[0].postalCode,
+//         lat: venue._embedded.venues[0].location.latitude,
+//         lng: venue._embedded.venues[0].location.longitude,
+//         ticketmasterId: venue._embedded.venues[0].id,
+//         marketId: venue._embedded.venues[0].markets[0].id
+//       }, function() {
+//         count++;
+//         console.log('Venue ' + count + ' was saved');
+//         if (count === venues) return process.exit();
+//       });
 //     } else {
 //       Venue.create({
 //         name: venue._embedded.venues[0].name,
@@ -130,6 +80,58 @@ function saveVenues(obj) {
 //     }
 //   });
 // }
+
+// LONDON VENUES DATABASE FUNCTION
+function saveVenues(obj) {
+  var venue = obj.events;
+  var count = 0;
+  venue.forEach(function(venue, index, venues) {
+    if (venue._embedded.venues[0].location) {
+      if (venue._embedded.venues[0].markets[0].id === '202') {
+        Venue.create({
+          name: venue._embedded.venues[0].name,
+          gigs: [],
+          postcode: venue._embedded.venues[0].postalCode,
+          lat: venue._embedded.venues[0].location.latitude,
+          lng: venue._embedded.venues[0].location.longitude,
+          ticketmasterId: venue._embedded.venues[0].id,
+          marketId: venue._embedded.venues[0].markets[0].id
+        }, function() {
+          count++;
+          console.log('Venue ' + count + ' was saved');
+          if (count === venues) return process.exit();
+        });
+      } else {
+        Venue.create({
+          name: venue._embedded.venues[0].name,
+          gigs: [],
+          postcode: venue._embedded.venues[0].postalCode,
+          lat: venue._embedded.venues[0].location.latitude,
+          lng: venue._embedded.venues[0].location.longitude,
+          ticketmasterId: venue._embedded.venues[0].id,
+          marketId: venue._embedded.venues[0].markets[1].id
+        }, function() {
+          count++;
+          console.log('Venue ' + count + ' was saved');
+          if (count === venues) return process.exit();
+        });
+      }
+    } else {
+      Venue.create({
+        name: venue._embedded.venues[0].name,
+        gigs: [],
+        postcode: venue._embedded.venues[0].postalCode,
+        ticketmasterId: venue._embedded.venues[0].id,
+        marketId: venue._embedded.venues[0].markets[0].id
+      }, function() {
+        console.log(venue._embedded.venues[0].name + ' is fucked');
+        count++;
+        console.log('Venue ' + count + ' was saved');
+        if (count === venues.length) return process.exit();
+      });
+    }
+  });
+}
 
 function getVenues() {
   // Venue.collection.drop();
