@@ -12,8 +12,6 @@
 
 //7. Populate the gigs for the venues on a button click so it's not done on page refresh...could lead to issues with call limits?
 
-//8.
-
 const express       = require('express');
 const morgan        = require('morgan');
 const app           = express();

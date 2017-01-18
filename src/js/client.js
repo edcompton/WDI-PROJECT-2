@@ -376,7 +376,7 @@ googleMap.mapSetup = function() {
     zoom: 12,
     center: new google.maps.LatLng(51.506178,-0.088369),
     mapTypeId: google.maps.MapTypeId.ROADMAP,
-    styles: [{"featureType":"all","elementType":"all","stylers":[{"hue":"#ff0000"},{"saturation":-100},{"lightness":-30}]},{"featureType":"all","elementType":"labels.text.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"all","elementType":"labels.text.stroke","stylers":[{"color":"#353535"}]},{"featureType":"landscape","elementType":"geometry","stylers":[{"color":"#656565"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"color":"#505050"}]},{"featureType":"poi","elementType":"geometry.stroke","stylers":[{"color":"#808080"}]},{"featureType":"road","elementType":"geometry","stylers":[{"color":"#454545"}]}]
+    styles: [{'featureType': 'all','elementType': 'all','stylers': [{'hue': '#ff0000'},{'saturation': -100},{'lightness': -30}]},{'featureType': 'all','elementType': 'labels.text.fill','stylers': [{'color': '#ffffff'}]},{'featureType': 'all','elementType': 'labels.text.stroke','stylers': [{'color': '#353535'}]},{'featureType': 'landscape','elementType': 'geometry','stylers': [{'color': '#656565'}]},{'featureType': 'poi','elementType': 'geometry.fill','stylers': [{'color': '#505050'}]},{'featureType': 'poi','elementType': 'geometry.stroke','stylers': [{'color': '#808080'}]},{'featureType': 'road','elementType': 'geometry','stylers': [{'color': '#454545'}]}]
   };
   this.map = new google.maps.Map(canvas, mapOptions);
   $('body').on('click', '.modalWindow', googleMap.openNav);
