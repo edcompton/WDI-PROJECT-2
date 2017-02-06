@@ -21,8 +21,8 @@ const config        = require('./config/config');
 const bodyParser    = require('body-parser');
 const router        = require('./config/routes');
 
-app.use(morgan('dev'));
 app.use(express.static(`${__dirname}/public`));
+app.use(morgan('dev'));
 app.use(cors());
 
 app.use(bodyParser.json());
