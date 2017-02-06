@@ -43,7 +43,7 @@ googleMap.newSearchMarkers = function(venue, gig) {
   const marker = new google.maps.Marker({
     position: latlng,
     icon: {
-      url: '../Images/newMicrophone.png',
+      url: '../images/newMicrophone.png',
       scaledSize: new google.maps.Size(30, 30)
     },
     map: this.map,
@@ -346,7 +346,7 @@ googleMap.createMarkerForVenue = function(venue) {
     const marker = new google.maps.Marker({
       position: latlng,
       icon: {
-        url: '../Images/newMicrophone.png',
+        url: '../images/newMicrophone.png',
         scaledSize: new google.maps.Size(30, 30)
       },
       map: this.map,
