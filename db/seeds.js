@@ -18,33 +18,6 @@ const options = {
   json: true
 };
 
-
-// function saveGigs(obj) {
-//   var gig = obj;
-//   var count = 0;
-//   gig.forEach(function(gig, index, gigs) {
-//     Gig.create({
-//       name: gig.name,
-//       image: gig.images[0].url,
-//       date: gig.dates.start.localDate,
-//       venuename: gig._embedded.venues[0].name
-//     }, function() {
-//       count++;
-//       console.log('Gig ' + count + ' was saved');
-//       if (count === gigs) return process.exit();
-//     });
-//   });
-// }
-
-// function populateGigs() {
-//   Gig.collection.drop();
-//   rp(options)
-//   .then(function(string) {
-//     var obj = string._embedded.events;
-//     saveGigs(obj);
-//   });
-// }
-
 // LA and NY SEEDS FUNCTION
 // function saveVenues(obj) {
 //   var venue = obj.events;
@@ -148,51 +121,30 @@ getVenues();
 
 
 
-// name: { type: String, required: true, unique: true},
-// gigs: { type: Array },
-// postcode: {type: String },
-// lat: {type: String},
-// lng: {type: String }
 
 
-// function saveVenues(obj) {
-//   var venue = obj.events;
+// function saveGigs(obj) {
+//   var gig = obj;
 //   var count = 0;
-//   venue.forEach(function(venue, index, venues) {
-//     // Gig.find({ venuename: venue._embedded.venues[0].name }, (err, data) =>
-//     // console.log(data.forEach(function (value, index) {
-//     //   console.log(value);
-//     // })));
-//     if (venue._embedded.venues[0].location) {
-//       Venue.create({
-//         name: venue._embedded.venues[0].name,
-//         gigs: Gig.find({ venuename: venue._embedded.venues[0].name }, (err, data) => {
-//           data.forEach(function (value, index) {
-//           return value;
-//         });}),
-//         postcode: venue._embedded.venues[0].postalCode,
-//         lat: venue._embedded.venues[0].location.latitude,
-//         lng: venue._embedded.venues[0].location.longitude
-//       }, function() {
-//         count++;
-//         console.log('Venue ' + count + ' was saved');
-//         if (count === venues) return process.exit();
-//       });
-//     } else {
-//       Venue.create({
-//         name: venue._embedded.venues[0].name,
-//         gigs: Gig.find({ venuename: venue._embedded.venues[0].name }, (err, data) => {
-//           data.forEach(function (value, index) {
-//           return value;
-//         });}),
-//         postcode: venue._embedded.venues[0].postalCode
-//       }, function() {
-//         console.log(venue._embedded.venues[0].name + ' is fucked');
-//         count++;
-//         console.log('Venue ' + count + ' was saved');
-//         if (count === venues.length) return process.exit();
-//       });
-//     }
+//   gig.forEach(function(gig, index, gigs) {
+//     Gig.create({
+//       name: gig.name,
+//       image: gig.images[0].url,
+//       date: gig.dates.start.localDate,
+//       venuename: gig._embedded.venues[0].name
+//     }, function() {
+//       count++;
+//       console.log('Gig ' + count + ' was saved');
+//       if (count === gigs) return process.exit();
+//     });
 //   });
-//
+// }
+
+// function populateGigs() {
+//   Gig.collection.drop();
+//   rp(options)
+//   .then(function(string) {
+//     var obj = string._embedded.events;
+//     saveGigs(obj);
+//   });
 // }

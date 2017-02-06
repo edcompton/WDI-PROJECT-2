@@ -28,7 +28,7 @@ googleMap.searchArtistGigs = function(e) {
         googleMap.newSearchMarkers(venues, gig);
         setTimeout(() => {
           googleMap.refocusMap();
-        }, 1000);
+        }, 600);
       });
     }
   });
@@ -161,7 +161,7 @@ googleMap.searchArea = function(e) {
   e.preventDefault();
   googleMap.clearOverlays();
   googleMap.closeNav();
-  $.get('http://localhost:3000/venues').done((data) => {
+  $.get(`${window.location.origin}/venues`).done((data) => {
     $(data.venues).each((index, gig) => {
       setTimeout(() => {
         googleMap.createMarkerForNewVenues(gig);
@@ -367,7 +367,7 @@ googleMap.populateVenues = function(data) {
 };
 
 googleMap.getVenues = function() {
-  $.get('http://localhost:3000/venues').done(this.populateVenues);
+  $.get(`${window.location.origin}/venues`).done(this.populateVenues);
 };
 
 googleMap.mapSetup = function() {
