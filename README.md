@@ -20,8 +20,12 @@ As an MVP, the app needed to:
 ## Local Setup
 
 Clone or download the repository and navigate to it's root in terminal.
-run npm i, mongod, node db/seeds.js and gulp.
-Navigate to http://localhost:7000.
+
+- run ``npm i`` 
+- run ``mongod`` 
+- run ``node db/seeds.js`` 
+- run ``gulp``
+- Navigate to ``http://localhost:8000``.
 
 ## Technologies Used
 
