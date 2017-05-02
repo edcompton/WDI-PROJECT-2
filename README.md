@@ -59,7 +59,7 @@ In order to populate the map with gig venues, I seeded a static list of venue lo
 ### Info Window showing upcoming gigs
 When a venue is selected, a front end ajax request is made to the ticketmaster API in order to populate all upcoming gigs for that venue over the next 3 months, displaying these within a customised info window.
 
-<img src="/Users/edmundcompton/Desktop/Screen Shot 2017-05-02 at 10.47.39.png">
+<img src="https://cloud.githubusercontent.com/assets/22911872/25626364/3d424ae4-2f57-11e7-8b11-a0b5df280890.png">
 
 
 ### Sliding spotify sidebar with the latest album from the artist
