@@ -1,7 +1,7 @@
 <img src="https://cloud.githubusercontent.com/assets/20629455/23824362/2c9817c2-066d-11e7-8988-7b1eefc6d628.jpg"> <img src="https://cloud.githubusercontent.com/assets/20629455/23824363/2ddeaa7e-066d-11e7-8630-f7c890c9f1c1.png"> 
 
 
-<h1>WDI Project 2: <a style="text-decoration:none;" href="https://wdi-gigfinder.herokuapp.com/">Gigfinder</h1></a>
+<h1>WDI Project 2: <a target="_blank" style="text-decoration:none;" href="https://wdi-gigfinder.herokuapp.com/">Gigfinder</h1></a>
 
 This web app was built for my second project whilst enrolled on the Web Development Immersive course at General Assembly. 
 
